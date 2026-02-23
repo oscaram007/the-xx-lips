@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery — Lips</title>
+
+  <!-- Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@100;200;300&display=swap&font-display=swap" rel="stylesheet"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type"         content="website"/>
+  <meta property="og:title"        content="Lips — The Lyric Gallery"/>
+  <meta property="og:description"  content="The xx · I See You · 2017. An immersive gallery for a song built from ancient scripture, medieval voices, and modern longing."/>
+  <meta property="og:url"          content="https://yourusername.github.io/your-repo/lips.html"/>
+  <meta property="og:image"        content="https://yourusername.github.io/your-repo/preview-lips.png"/>
+  <meta property="og:image:width"  content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="Lips — The Lyric Gallery"/>
+  <meta name="twitter:description" content="The xx · I See You · 2017"/>
+  <meta name="twitter:image"       content="https://yourusername.github.io/your-repo/preview-lips.png"/>
+  <meta name="description"         content="An immersive gallery experience for Lips by The xx."/>
+  <meta name="author"              content="The Lyric Gallery"/>
+  <meta name="theme-color"         content="#0e0c1a"/>
+  <link rel="canonical"            href="https://yourusername.github.io/your-repo/lips.html"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Pressing palette — dependency, weight, suspension, shadow */
+      --midnight:     #090909;  /* near-colorless dark — a room absorbed into itself */
+      --shadow-base:  #0d0c10;  /* shadow cast by one low light — barely violet */
+      --weight-deep:  #080810;  /* the body at depth — blue-violet, dense */
+      --held-dark:    #0a090c;  /* held breath — almost nothing */
+
+      /* Foreground — ashen, suspended, not bright */
+      --text-bright:  #d8d4e0;  /* pale suspended lavender-grey — not warm, not cold */
+      --text-mid:     #72707c;  /* shadow-grey, worn, mid-distance */
+      --text-dim:     #2e2c35;  /* depth, barely visible, the room itself */
+
+      /* Accent palette — the emotional register */
+      --altitude:     #c8ccd8;  /* bleached ashen blue-white — thin air at height */
+      --shadow-tone:  #6e6c80;  /* desaturated grey-violet — shadow in low light */
+      --weight-tone:  #2a2840;  /* deep low-sat blue-violet — sits not glows */
+      --held-breath:  #9e9cac;  /* ashy pale lavender — suspended, almost grey */
+      --wine-buried:  #1e0e14;  /* warmth buried in dark — memory not presence */
+      --press-dark:   #18161e;  /* pressed air — weight without temperature */
+
+      /* Legacy refs — mapped to new palette */
+      --silver-moon:  #c8ccd8;  /* → altitude */
+      --silver-pearl: #c8ccd8;  /* → altitude */
+      --gold-ember:   #6e6c80;  /* → shadow-tone */
+      --rose-gold:    #9e9cac;  /* → held-breath */
+      --pearl-cold:   rgba(200,204,216,0.85);
+      --rule-gold:    rgba(110,108,128,0.45);  /* shadow-tone rule */
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── CURSOR ── */
+    * { cursor: none !important; }
+
+    #cursor-orb {
+      position: fixed;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle at 38% 35%,
+        rgba(200,204,216,0.85) 0%,
+        rgba(158,156,172,0.45) 40%,
+        rgba(110,108,128,0.20) 70%,
+        transparent 100%);
+      box-shadow:
+        0 0 10px 3px rgba(158,156,172,0.28),
+        0 0 25px 6px rgba(110,108,128,0.12),
+        inset 0 1px 2px rgba(220,222,232,0.5);
+      transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+    }
+    #cursor-trail {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      background: rgba(110,108,128,0.22);
+      box-shadow: 0 0 6px 2px rgba(110,108,128,0.12);
+      transition: left 0.2s ease, top 0.2s ease;
+    }
+
+    /* ── PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0;
+      width: 0%; height: 2px;
+      z-index: 9000;
+      background: linear-gradient(to right,
+        rgba(110,108,128,0.7),
+        rgba(200,204,216,0.85),
+        rgba(42,40,64,0.8),
+        rgba(110,108,128,0.7));
+      background-size: 200% 100%;
+      animation: barShimmer 4s linear infinite;
+      box-shadow: 0 0 8px rgba(200,204,216,0.25), 0 0 20px rgba(110,108,128,0.12);
+      transition: width 0.1s linear;
+    }
+    @keyframes barShimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── BODY ── */
+    body {
+      background-color: var(--midnight);
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--text-bright);
+      overflow-x: hidden;
+    }
+
+    /* ── SVG FILTERS ── */
+    #svg-filters { position: fixed; width: 0; height: 0; overflow: hidden; }
+
+    /* ════════════════════════════════════════
+       BACKGROUND LAYERS — dark water, jewel light
+    ════════════════════════════════════════ */
+
+    /* Deep base — near-colorless dark, a room absorbed into itself */
+    .bg-deep {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 100% 70% at 15% 25%,  #0f0d14 0%, #090909 45%, transparent 75%),
+        radial-gradient(ellipse 70%  90% at 88% 80%,  #0c0a12 0%, #08080e 50%, transparent 78%),
+        radial-gradient(ellipse 55%  50% at 50% 52%,  #0a0810 0%, transparent 68%),
+        radial-gradient(ellipse 90%  55% at 25% 90%,  #0e0c14 0%, #08080c 48%, transparent 72%),
+        radial-gradient(ellipse 65%  38% at 75% 12%,  #0c0a12 0%, #09090f 52%, transparent 72%),
+        radial-gradient(ellipse 50%  60% at 60% 60%,  #1e0e14 0%, transparent 65%),
+        linear-gradient(160deg, #0c0a12 0%, #090909 25%, #0a0810 50%, #0c0a12 75%, #090909 100%);
+      transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    /* Shadow light — grey-violet, weight blue, held breath. No jewels. */
+    .bg-jewel {
+      position: fixed; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse 22% 14% at 18% 20%,  rgba(110,108,128,0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 15% 22% at 72% 35%,  rgba(158,156,172,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 28% 16% at 42% 62%,  rgba(42,40,64,0.20)  0%, transparent 68%),
+        radial-gradient(ellipse 18% 28% at 85% 70%,  rgba(110,108,128,0.14) 0%, transparent 62%),
+        radial-gradient(ellipse 20% 12% at 30% 85%,  rgba(42,40,64,0.16)  0%, transparent 65%),
+        radial-gradient(ellipse 14% 20% at 60% 15%,  rgba(200,204,216,0.08) 0%, transparent 60%);
+      mix-blend-mode: screen;
+      animation: jewelDrift 80s ease-in-out infinite alternate;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    /* Shadow light — barely moving, near-static */
+    @keyframes jewelDrift {
+      0%   { opacity: 0.55; filter: blur(2px); transform: scale(1) translate(0,0); }
+      50%  { opacity: 0.70; filter: blur(1px); transform: scale(1.01) translate(-4px,-3px); }
+      100% { opacity: 0.58; filter: blur(2px); transform: scale(1.00) translate(3px,4px); }
+    }
+
+    /* Altitude caustics — near-imperceptible drift */
+    @keyframes causticsDrift {
+      0%   { opacity: 0.45; transform: scale(1) translate(0,0); }
+      50%  { opacity: 0.60; transform: scale(1.015) translate(-5px,4px); }
+      100% { opacity: 0.48; transform: scale(0.99) translate(4px,-5px); }
+    }
+
+    /* Buried warmth — barely breathes */
+    @keyframes warmthBreath {
+      0%   { opacity: 0.35; transform: translate(0,0); }
+      50%  { opacity: 0.50; transform: translate(-3px,4px); }
+      100% { opacity: 0.36; transform: translate(3px,-3px); }
+    }
+
+    /* Altitude caustics — bleached ashen blue-white, breath in cold air, no floor */
+    .bg-caustics {
+      position: fixed; inset: 0; z-index: 2;
+      background:
+        radial-gradient(ellipse 18% 12% at 25% 22%,  rgba(200,204,216,0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 12% 20% at 60% 40%,  rgba(190,194,208,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 20% 10% at 80% 28%,  rgba(205,208,220,0.13) 0%, transparent 62%),
+        radial-gradient(ellipse 22% 14% at 38% 68%,  rgba(195,198,212,0.15) 0%, transparent 65%),
+        radial-gradient(ellipse 10% 18% at 78% 72%,  rgba(185,188,202,0.12) 0%, transparent 58%),
+        radial-gradient(ellipse 16% 10% at 12% 75%,  rgba(198,200,215,0.13) 0%, transparent 62%);
+      mix-blend-mode: screen;
+      filter: blur(2px);
+      animation: causticsDrift 90s ease-in-out infinite alternate;
+      transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    @keyframes causticsDrift {
+      0%   { opacity: 0.6; transform: scale(1) translate(0,0); }
+      50%  { opacity: 0.9; transform: scale(1.03) translate(-8px,6px); }
+      100% { opacity: 0.65; transform: scale(0.98) translate(6px,-8px); }
+    }
+
+    /* Buried warmth — wine so deep it barely exists. Memory, not presence. */
+    .bg-warmth {
+      position: fixed; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse 40% 30% at 20% 70%,  rgba(48,16,24,0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 30% 40% at 82% 30%,  rgba(40,12,18,0.16) 0%, transparent 60%),
+        radial-gradient(ellipse 25% 20% at 55% 88%,  rgba(44,14,20,0.14) 0%, transparent 58%);
+      mix-blend-mode: screen;
+      animation: warmthBreath 60s ease-in-out infinite alternate;
+    }
+
+    /* Hue overlay — shadow grey-violet and weight blue, no warmth */
+    .bg-hue {
+      position: fixed; inset: 0; z-index: 3; pointer-events: none;
+      mix-blend-mode: soft-light;
+      background: linear-gradient(135deg,
+        rgba(60,58,80,0.10) 0%, rgba(42,40,64,0.08) 40%,
+        rgba(50,48,68,0.08) 70%, rgba(55,52,72,0.10) 100%);
+      animation: hueWave 60s linear infinite;
+    }
+    @keyframes hueWave {
+      0%   { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    /* Grain — like old film, candlelit texture */
+    .bg-grain {
+      position: fixed; inset: 0; z-index: 4; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: 0.6;
+      mix-blend-mode: overlay;
+    }
+
+    /* Vignette — darkness pressing in hard, field of vision narrowing */
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 5; pointer-events: none;
+      background:
+        radial-gradient(ellipse 68% 65% at 50% 50%,
+          transparent 20%,
+          rgba(6,5,8,0.45) 55%,
+          rgba(5,4,7,0.75) 78%,
+          rgba(4,3,6,0.92) 100%);
+    }
+
+    /* Distant light — single faint source, top-right, memory of a window */
+    .bg-distant-light {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 22% 18% at 88% 8%,
+          rgba(185,190,208,0.06) 0%,
+          rgba(165,170,188,0.03) 45%,
+          transparent 100%);
+      animation: distantFade 90s ease-in-out infinite alternate;
+    }
+    @keyframes distantFade {
+      0%   { opacity: 0.7; }
+      50%  { opacity: 1.0; }
+      100% { opacity: 0.75; }
+    }
+
+    /* ── PARTICLES CANVAS ── */
+    #particles-canvas {
+      position: fixed; inset: 0;
+      z-index: 6; pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════
+       SPLASH SCREEN
+    ════════════════════════════════════════ */
+    #splash {
+      position: fixed; inset: 0;
+      z-index: 8000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+      pointer-events: all;
+      transition: opacity 1.6s cubic-bezier(0.4,0,0.2,1), visibility 1.6s;
+    }
+    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .splash-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.54rem; font-weight: 200;
+      letter-spacing: 0.42em;
+      color: var(--text-dim);
+      text-transform: uppercase; margin-bottom: 3.5rem;
+      opacity: 0; animation: splashFade 1.2s ease 0.5s forwards;
+    }
+
+    .splash-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 10vw, 9rem);
+      font-weight: 500; font-style: italic;
+      line-height: 1.0; letter-spacing: 0.04em;
+      background: linear-gradient(
+        108deg,
+        #141218 15%,
+        rgba(200,204,216,0.95) 42%,
+        rgba(188,192,208,0.90) 50%,
+        rgba(200,204,216,0.95) 58%,
+        #141218 85%
+      );
+      background-size: 280% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: splashFade 1.6s ease 0.8s forwards, titleShimmer 7s linear 2.5s infinite;
+      margin-bottom: 1.8rem;
+    }
+
+    .splash-band {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; font-weight: 200;
+      letter-spacing: 0.32em; color: var(--text-mid);
+      text-transform: uppercase; margin-bottom: 0.4rem;
+      opacity: 0; animation: splashFade 1.2s ease 1.2s forwards;
+    }
+    .splash-year {
+      font-size: 0.82rem; font-family: 'Cormorant Garamond', serif;
+      font-style: italic; color: var(--text-dim);
+      letter-spacing: 0.12em; margin-bottom: 5rem;
+      opacity: 0; animation: splashFade 1.2s ease 1.4s forwards;
+    }
+
+    .splash-enter {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.52rem; font-weight: 200;
+      letter-spacing: 0.36em; text-transform: uppercase;
+      color: var(--text-mid);
+      padding: 1rem 2.2rem;
+      border: 1px solid rgba(110,108,128,0.20);
+      background: rgba(9,9,9,0.55);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      animation: splashFade 1s ease 2.2s forwards, pulseOpacity 3s ease 3s infinite;
+      transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+    }
+    .splash-enter:hover {
+      background: rgba(14,13,18,0.72);
+      border-color: rgba(158,156,172,0.28);
+      color: var(--altitude);
+    }
+
+    @keyframes splashFade {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseOpacity {
+      0%,100% { opacity: 0.55; } 50% { opacity: 1; }
+    }
+    @keyframes titleShimmer {
+      0%   { background-position: 280% center; }
+      100% { background-position: -280% center; }
+    }
+
+    /* ── PAGE ── */
+    #page {
+      position: relative; z-index: 10;
+      min-height: 100vh;
+      opacity: 0; transition: opacity 1.4s ease 0.4s;
+    }
+    #page.visible { opacity: 1; }
+
+    /* ── MUSEUM HEADER ── */
+    .museum-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex; align-items: center;
+      padding: 1.3rem 3rem;
+      backdrop-filter: blur(18px) saturate(1.2) brightness(0.7);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2) brightness(0.7);
+      background: rgba(9,9,9,0.60);
+      border-bottom: 1px solid rgba(110,108,128,0.14);
+    }
+    .museum-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.58rem; font-weight: 200;
+      letter-spacing: 0.28em; color: var(--text-dim);
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+    .header-rule {
+      flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(110,108,128,0.10), transparent);
+      margin: 0 2rem;
+    }
+    .header-nav {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.56rem; font-weight: 200;
+      letter-spacing: 0.22em; color: var(--text-dim);
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    /* ── HERO — off-axis, not formally composed, left of center ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: center;
+      padding: 8rem 2rem 4rem 12vw;
+      text-align: left; position: relative;
+    }
+    .exhibit-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.52rem; font-weight: 200;
+      letter-spacing: 0.38em; color: var(--text-dim);
+      text-transform: uppercase; margin-bottom: 4rem;
+      opacity: 0; animation: heroFade 1.2s ease 0.3s forwards;
+    }
+    /* Hero title — intimate, quiet, not declarative */
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.75rem);
+      font-weight: 400; font-style: italic;
+      line-height: 1.3; letter-spacing: 0.12em;
+      color: var(--text-mid);
+      margin-bottom: 2.4rem;
+      opacity: 0; animation: heroFade 1.4s ease 0.55s forwards;
+    }
+    .hero-divider {
+      width: 18px; height: 1px;
+      background: linear-gradient(to right, rgba(110,108,128,0.38), transparent);
+      margin: 0 0 1.8rem;
+      opacity: 0; animation: heroFade 1.2s ease 0.72s forwards;
+    }
+    .hero-band {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.58rem; font-weight: 200;
+      letter-spacing: 0.28em; color: var(--text-dim);
+      text-transform: uppercase; margin-bottom: 0.5rem;
+      opacity: 0; animation: heroFade 1.2s ease 0.88s forwards;
+    }
+    .hero-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.80rem; font-style: italic;
+      color: var(--text-dim); letter-spacing: 0.10em;
+      opacity: 0; animation: heroFade 1.2s ease 1.05s forwards;
+    }
+    .scroll-cue {
+      position: absolute; bottom: 3rem; left: 12vw;
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 0.5rem;
+      opacity: 0; animation: heroFade 1s ease 2.4s forwards;
+    }
+    .scroll-cue span {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.48rem; font-weight: 200;
+      letter-spacing: 0.30em; color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(110,108,128,0.35), transparent);
+      animation: scrollPulse 3s ease-in-out infinite;
+    }
+    @keyframes heroFade {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.20; transform: scaleY(1); }
+      50%      { opacity: 0.65; transform: scaleY(1.10); }
+    }
+
+    /* ── GALLERY — off-axis left, vast silence between verses ── */
+    .lyrics-gallery { padding: 0 2rem 30vh; }
+    .gallery-inner  {
+      max-width: 600px;
+      margin: 0 auto 0 max(2rem, 8vw); /* left of center, not formally composed */
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin: 0 0 18vh; max-width: 600px; padding: 0;
+    }
+    .divider-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(to right, rgba(110,108,128,0.12), transparent);
+    }
+    .divider-mark {
+      font-size: 0.45rem; color: rgba(110,108,128,0.18);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── VERSE PULSE — silence made visible ── */
+    .verse-pulse {
+      display: block; width: 100%; height: 1px;
+      margin: 0 0 20vh; position: relative;
+      opacity: 0; transform: scaleX(0);
+      transform-origin: left;
+      transition: opacity 1.2s ease, transform 1.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    .verse-pulse.in-view { opacity: 1; transform: scaleX(1); }
+    .verse-pulse::before {
+      content: '';
+      display: block; height: 1px;
+      background: linear-gradient(to right,
+        transparent 0%,
+        rgba(110,108,128,0.50) 20%,
+        rgba(200,204,216,0.55) 50%,
+        rgba(42,40,64,0.45) 80%,
+        transparent 100%);
+      box-shadow: 0 0 10px 2px rgba(110,108,128,0.18), 0 0 25px 5px rgba(42,40,64,0.10);
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+    }
+    .verse-pulse::after {
+      content: '·';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.7rem; color: rgba(110,108,128,0.40);
+    }
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 8px 2px rgba(110,108,128,0.12), 0 0 18px 4px rgba(42,40,64,0.08); }
+      to   { box-shadow: 0 0 18px 5px rgba(110,108,128,0.30), 0 0 40px 10px rgba(42,40,64,0.16); }
+    }
+
+    /* ── VERSE BLOCK — silence between is as important as the lines ── */
+    .verse {
+      margin-bottom: 4vh;
+      scroll-margin-top: 5rem;
+    }
+
+    /* ── SECTION LABEL — barely there, doesn't tell you how to feel ── */
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.46rem; font-weight: 200;
+      letter-spacing: 0.35em; color: var(--text-dim);
+      text-transform: uppercase; margin-bottom: 3.5rem;
+      display: block; opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 1.4s ease, transform 1.4s ease;
+    }
+    .section-label.in-view { opacity: 0.45; transform: translateY(0); }
+
+    /* ── LYRIC LINES — each lands alone, weight between them ── */
+    .lyric-line {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.8vw, 1.95rem);
+      font-weight: 500;
+      line-height: 2.4;
+      letter-spacing: 0.01em;
+      color: var(--text-bright);
+      margin-bottom: 0;
+      opacity: 0;
+      will-change: opacity, transform;
+      transition:
+        opacity 1.2s cubic-bezier(0.25,0.46,0.45,0.94),
+        transform 1.2s cubic-bezier(0.25,0.46,0.45,0.94),
+        color 0.6s ease,
+        text-shadow 0.6s ease;
+    }
+    .lyric-line:hover {
+      color: #e2e4ec;
+      text-shadow:
+        0 0 28px rgba(200,204,216,0.28),
+        0 0 60px rgba(158,156,172,0.12);
+    }
+    .lyric-line.italic { font-style: italic; }
+    .lyric-line.in-view { opacity: 1 !important; transform: none !important; }
+
+    /* Entrance variants — weight descending, not theatrical */
+    .lyric-line.enter-left  { transform: translateX(-16px); }
+    .lyric-line.enter-right { transform: translateX(16px); }
+    .lyric-line.enter-scale { transform: translateY(14px) scale(0.97); }
+    .lyric-line.enter-up    { transform: translateY(22px); }
+    .lyric-line.enter-fade  { transform: translateY(8px); }
+
+    /* Drop cap — held-breath, no grandeur */
+    .lyric-line.drop-cap::first-letter {
+      font-size: 3.6em; line-height: 0.78;
+      float: left; margin: 0.08em 0.12em 0 0;
+      color: var(--held-breath);
+      font-style: italic; font-weight: 400;
+      text-shadow: 0 0 28px rgba(158,156,172,0.22);
+    }
+
+    /* ── CHANT — quieter, smaller, indented, not incantatory anymore */
+    .lyric-line.chant {
+      font-size: clamp(0.95rem, 2.2vw, 1.55rem);
+      color: var(--text-mid);
+      font-style: italic;
+      font-weight: 400;
+      padding-left: 2.4rem;
+      letter-spacing: 0.03em;
+      line-height: 2.6;
+    }
+    .lyric-line.chant:hover {
+      color: var(--altitude);
+      text-shadow:
+        0 0 18px rgba(200,204,216,0.25),
+        0 0 44px rgba(158,156,172,0.10);
+    }
+
+    /* ── PRE-CHORUS — intimate, breathed, smaller than verse ── */
+    .verse.pre-chorus .lyric-line {
+      font-size: clamp(1.0rem, 2.2vw, 1.65rem);
+      color: var(--text-mid);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      line-height: 2.6;
+    }
+
+    /* ── OUTRO — song collapses back, lines compress and dim ── */
+    .verse.outro .lyric-line {
+      color: var(--text-mid);
+      font-size: clamp(1.05rem, 2.4vw, 1.75rem);
+      font-weight: 400;
+      line-height: 2.6;
+    }
+    .verse.outro .lyric-line.final {
+      color: var(--text-dim);
+      font-size: clamp(0.9rem, 2.0vw, 1.45rem);
+      font-style: italic;
+      letter-spacing: 0.06em;
+      line-height: 2.8;
+    }
+
+    /* ── PLACARD — no museum drama, flush with text, barely present ── */
+    .placard-wrapper {
+      margin: 24vh 0 0;
+      max-width: 380px;
+      transform: translateY(24px);
+      opacity: 0;
+      transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    .placard-wrapper.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .placard {
+      padding: 2.4rem 2.2rem;
+      background: rgba(9,9,12,0.82);
+      backdrop-filter: blur(16px) saturate(1.0) brightness(0.88);
+      -webkit-backdrop-filter: blur(16px) saturate(1.0) brightness(0.88);
+      border: 1px solid rgba(110,108,128,0.10);
+      border-left: 2px solid rgba(110,108,128,0.28);
+      border-top: none;
+      box-shadow:
+        0 1px 2px  rgba(0,0,0,0.70),
+        0 4px 18px rgba(0,0,0,0.50),
+        0 16px 48px rgba(0,0,0,0.28);
+      position: relative;
+    }
+    .placard::after { display: none; }
+    .placard-number {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.46rem; font-weight: 200;
+      letter-spacing: 0.38em; color: var(--text-dim);
+      text-transform: uppercase; margin-bottom: 1.6rem;
+      opacity: 0.7;
+    }
+    .placard-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 500; font-style: italic;
+      letter-spacing: 0.03em; color: var(--text-bright);
+      margin-bottom: 0.6rem;
+    }
+    .placard-band {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.58rem; font-weight: 200;
+      letter-spacing: 0.22em; color: var(--text-mid);
+      text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+    .placard-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem; font-style: italic;
+      color: var(--text-dim); letter-spacing: 0.08em;
+    }
+    .placard-rule {
+      width: 24px; height: 1px;
+      background: linear-gradient(to right, rgba(110,108,128,0.40), transparent);
+      margin: 1.6rem 0;
+    }
+    .placard-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.95;
+      color: var(--text-mid); font-style: italic;
+      font-weight: 400;
+    }
+    .placard-desc em {
+      color: var(--altitude); font-style: normal;
+    }
+
+    #back-to-top {
+      position: fixed; bottom: 2.2rem; right: 2.2rem;
+      z-index: 500; width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: rgba(9,9,9,0.60);
+      backdrop-filter: blur(12px) saturate(1.1);
+      -webkit-backdrop-filter: blur(12px) saturate(1.1);
+      border: 1px solid rgba(110,108,128,0.18);
+      box-shadow:
+        0 2px 10px rgba(0,0,0,0.50),
+        0 0 24px rgba(110,108,128,0.08),
+        inset 0 1px 0 rgba(200,204,216,0.06);
+      opacity: 0; transform: translateY(10px) scale(0.9);
+      pointer-events: none;
+      transition:
+        opacity 0.6s cubic-bezier(0.22,1,0.36,1),
+        transform 0.6s cubic-bezier(0.22,1,0.36,1),
+        background 0.3s ease, box-shadow 0.3s ease;
+      animation: bttPulse 4s ease-in-out infinite;
+    }
+    #back-to-top.visible {
+      opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+    }
+    #back-to-top:hover {
+      background: rgba(14,13,18,0.82);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.55), 0 0 40px rgba(110,108,128,0.16), inset 0 1px 0 rgba(200,204,216,0.12);
+      transform: translateY(-2px) scale(1.06);
+    }
+    #back-to-top svg {
+      width: 13px; height: 13px;
+      stroke: var(--text-dim); stroke-width: 1.5;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+      transition: stroke 0.3s ease;
+    }
+    #back-to-top:hover svg { stroke: var(--altitude); }
+    @keyframes bttPulse {
+      0%,100% { box-shadow: 0 2px 10px rgba(0,0,0,0.50), 0 0 24px rgba(110,108,128,0.08), inset 0 1px 0 rgba(200,204,216,0.06); }
+      50%      { box-shadow: 0 2px 10px rgba(0,0,0,0.50), 0 0 42px rgba(110,108,128,0.18), inset 0 1px 0 rgba(200,204,216,0.10); }
+    }
+
+    /* ── FOOTER ── */
+    .gallery-footer {
+      text-align: left; padding: 6rem 2rem 4rem max(2rem, 8vw);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.50rem; font-weight: 200;
+      letter-spacing: 0.28em; color: var(--text-dim);
+      text-transform: uppercase; opacity: 0.4;
+    }
+
+    @media (max-width: 600px) {
+      .museum-header { padding: 1.2rem 1.5rem; }
+      .lyrics-gallery { padding: 0 1.4rem 16vh; }
+      .gallery-inner { margin: 0 auto 0 1.4rem; }
+      .hero { padding: 8rem 1.4rem 4rem 1.8rem; }
+      .scroll-cue { left: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SVG ripple filters -->
+<svg id="svg-filters" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="ripple" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="turbulence" baseFrequency="0.010 0.015" numOctaves="4" seed="3" result="turb">
+        <animate attributeName="baseFrequency" values="0.010 0.015;0.014 0.010;0.008 0.018;0.010 0.015" dur="22s" repeatCount="indefinite"/>
+        <animate attributeName="seed" values="3;7;11;3" dur="28s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="40" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="ripple2" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="turbulence" baseFrequency="0.016 0.009" numOctaves="3" seed="9" result="turb2">
+        <animate attributeName="baseFrequency" values="0.016 0.009;0.009 0.013;0.018 0.011;0.016 0.009" dur="19s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb2" scale="30" xChannelSelector="G" yChannelSelector="R"/>
+    </filter>
+    <filter id="ripple3" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.007 0.020" numOctaves="5" seed="15" result="turb3">
+        <animate attributeName="baseFrequency" values="0.007 0.020;0.020 0.009;0.013 0.015;0.007 0.020" dur="25s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb3" scale="50" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- Custom cursor -->
+<div id="cursor-orb"></div>
+<div id="cursor-trail"></div>
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Background layers — dark water, jewel glimmers -->
+<div class="bg-deep"     id="bg-deep"     aria-hidden="true"></div>
+<div class="bg-warmth"   aria-hidden="true"></div>
+<div class="bg-jewel"    id="bg-jewel"    aria-hidden="true"></div>
+<div class="bg-caustics" id="bg-caustics" aria-hidden="true"></div>
+<div class="bg-hue"      aria-hidden="true"></div>
+<div class="bg-grain"    aria-hidden="true"></div>
+<div class="bg-vignette" aria-hidden="true"></div>
+<div class="bg-distant-light" aria-hidden="true"></div>
+
+<!-- Particles -->
+<canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+<!-- Back to top — must live before <script> -->
+<button id="back-to-top" aria-label="Return to top of gallery" title="Return to top">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
+
+<!-- ══════════════════════════════════════════
+     SPLASH SCREEN
+══════════════════════════════════════════ -->
+<div id="splash" role="dialog" aria-label="Gallery entrance" aria-modal="true">
+  <p class="splash-eyebrow">The Lyric Gallery &nbsp;·&nbsp; Permanent Collection</p>
+  <h1 class="splash-title">Lips</h1>
+  <p class="splash-band">The xx</p>
+  <p class="splash-year">I See You &nbsp;·&nbsp; 2017</p>
+  <button class="splash-enter" id="enter-btn">Enter Gallery</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN PAGE
+══════════════════════════════════════════ -->
+<div id="page">
+
+  <header class="museum-header">
+    <span class="museum-name">The Lyric Gallery</span>
+    <div class="header-rule"></div>
+    <span class="header-nav">Permanent Collection</span>
+  </header>
+
+  <section class="hero">
+    <p class="exhibit-label">Exhibit No. 002 &nbsp;·&nbsp; Auditory Works</p>
+    <h2 class="hero-title">Lips</h2>
+    <div class="hero-divider"></div>
+    <p class="hero-band">The xx</p>
+    <p class="hero-year">2017 &ensp;·&ensp; I See You</p>
+    <div class="scroll-cue">
+      <span>View Work</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="lyrics-gallery">
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-mark">✦</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="gallery-inner">
+
+      <!-- ════════════════════════════════════
+           INTRO — Trio Mediæval
+           The ancient voice opens alone.
+           9 lines of chant, the sample from
+           David Lang's "Just (After Song of Songs)"
+           drawn from the biblical Song of Solomon.
+           Short, incantatory, circling.
+      ════════════════════════════════════ -->
+      <div class="verse" id="intro">
+        <span class="section-label">Intro &nbsp;—&nbsp; Trio Mediæval</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 1 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 2 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 3 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 4 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 5 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 6 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 7 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 8 ]</span>
+        <span class="lyric-line chant enter-fade">[ Intro, line 9 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           VERSE I — Romy Madley Croft
+           The modern voice enters. Physical,
+           breathless. Oxygen. Intimacy as
+           altitude — being lifted above.
+           6 lines.
+      ════════════════════════════════════ -->
+      <div class="verse" id="verse-1">
+        <span class="section-label">Verse I &nbsp;—&nbsp; Romy Madley Croft</span>
+        <span class="lyric-line enter-left drop-cap">[ Verse I, line 1 ]</span>
+        <span class="lyric-line enter-right">[ Verse I, line 2 ]</span>
+        <span class="lyric-line enter-up">[ Verse I, line 3 ]</span>
+        <span class="lyric-line enter-left">[ Verse I, line 4 ]</span>
+        <span class="lyric-line enter-scale">[ Verse I, line 5 ]</span>
+        <span class="lyric-line enter-right">[ Verse I, line 6 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           PRE-CHORUS — Romy Madley Croft
+           The refusal of gravity.
+           "I don't wanna know the way down" —
+           said twice, then twice again.
+           Not a denial but a negotiation.
+           4 lines.
+      ════════════════════════════════════ -->
+      <div class="verse pre-chorus" id="pre-chorus-1">
+        <span class="section-label">Pre-Chorus &nbsp;—&nbsp; Romy Madley Croft</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 1 ]</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 2 ]</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 3 ]</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 4 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           CHORUS — All Voices
+           Three timelines collide here:
+           ancient chant (chant class, indented),
+           Romy's confessions, Oliver's harmonies.
+           The chant lines interlace between
+           the modern lyric lines — render them
+           smaller and offset to show layering.
+           10 lines.
+      ════════════════════════════════════ -->
+      <div class="verse" id="chorus-1">
+        <span class="section-label">Chorus &nbsp;—&nbsp; All Voices</span>
+        <span class="lyric-line chant enter-up">[ Chorus: chant, line 1 ]</span>
+        <span class="lyric-line enter-scale">[ Chorus: vocal, line 2 ]</span>
+        <span class="lyric-line chant enter-fade">[ Chorus: chant, line 3 ]</span>
+        <span class="lyric-line chant enter-fade">[ Chorus: chant, line 4 ]</span>
+        <span class="lyric-line enter-scale">[ Chorus: vocal, line 5 ]</span>
+        <span class="lyric-line chant enter-fade">[ Chorus: chant, line 6 ]</span>
+        <span class="lyric-line enter-left">[ Chorus: vocal, line 7 ]</span>
+        <span class="lyric-line enter-right">[ Chorus: vocal, line 8 ]</span>
+        <span class="lyric-line enter-left">[ Chorus: vocal, line 9 ]</span>
+        <span class="lyric-line enter-right">[ Chorus: vocal, line 10 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           VERSE II — Oliver Sim
+           The male voice enters — cooler,
+           more observational. Chemistry,
+           seasons, pressed up against ceilings.
+           Where Romy is sensation, Oliver
+           is assessment. 5 lines.
+      ════════════════════════════════════ -->
+      <div class="verse" id="verse-2">
+        <span class="section-label">Verse II &nbsp;—&nbsp; Oliver Sim</span>
+        <span class="lyric-line enter-right">[ Verse II, line 1 ]</span>
+        <span class="lyric-line enter-left">[ Verse II, line 2 ]</span>
+        <span class="lyric-line enter-right">[ Verse II, line 3 ]</span>
+        <span class="lyric-line enter-up">[ Verse II, line 4 ]</span>
+        <span class="lyric-line enter-scale">[ Verse II, line 5 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           PRE-CHORUS — Oliver Sim
+           The same refusal, now in Oliver's
+           voice — lower, heavier. The words
+           identical but the weight different.
+           4 lines.
+      ════════════════════════════════════ -->
+      <div class="verse pre-chorus" id="pre-chorus-2">
+        <span class="section-label">Pre-Chorus &nbsp;—&nbsp; Oliver Sim</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 1 ]</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 2 ]</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 3 ]</span>
+        <span class="lyric-line enter-fade italic">[ Pre-chorus, line 4 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           CHORUS — All Voices (repeat)
+           The three voices again, same
+           structure. Repetition in The xx
+           is never redundancy — it is
+           commitment. 10 lines.
+      ════════════════════════════════════ -->
+      <div class="verse" id="chorus-2">
+        <span class="section-label">Chorus &nbsp;—&nbsp; All Voices</span>
+        <span class="lyric-line chant enter-up">[ Chorus: chant, line 1 ]</span>
+        <span class="lyric-line enter-scale">[ Chorus: vocal, line 2 ]</span>
+        <span class="lyric-line chant enter-fade">[ Chorus: chant, line 3 ]</span>
+        <span class="lyric-line chant enter-fade">[ Chorus: chant, line 4 ]</span>
+        <span class="lyric-line enter-scale">[ Chorus: vocal, line 5 ]</span>
+        <span class="lyric-line chant enter-fade">[ Chorus: chant, line 6 ]</span>
+        <span class="lyric-line enter-left">[ Chorus: vocal, line 7 ]</span>
+        <span class="lyric-line enter-right">[ Chorus: vocal, line 8 ]</span>
+        <span class="lyric-line enter-left">[ Chorus: vocal, line 9 ]</span>
+        <span class="lyric-line enter-right">[ Chorus: vocal, line 10 ]</span>
+      </div>
+
+      <span class="verse-pulse"></span>
+
+      <!-- ════════════════════════════════════
+           OUTRO — Trio Mediæval & Oliver Sim
+           The ancient voice returns, but
+           Oliver's voice is woven through.
+           The song ends where it began —
+           with the chant — plus one final
+           line: the pre-chorus closes the
+           whole work. 15 lines.
+           The final line (.final) should
+           appear barely visible — a ghost.
+      ════════════════════════════════════ -->
+      <div class="verse outro" id="outro">
+        <span class="section-label">Outro &nbsp;—&nbsp; Trio Mediæval &amp; Oliver Sim</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 1 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 2 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 3 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 4 ]</span>
+        <span class="lyric-line enter-fade">[ Outro, line 5 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 6 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 7 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 8 ]</span>
+        <span class="lyric-line enter-fade">[ Outro, line 9 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 10 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 11 ]</span>
+        <span class="lyric-line chant enter-fade">[ Outro, line 12 ]</span>
+        <span class="lyric-line enter-fade">[ Outro, line 13 ]</span>
+        <span class="lyric-line enter-fade">[ Outro, line 14 ]</span>
+        <span class="lyric-line final enter-fade italic">[ Outro, final line — the way down ]</span>
+      </div>
+
+      <!-- ════════════════════════════════════
+           MUSEUM PLACARD
+      ════════════════════════════════════ -->
+      <div class="placard-wrapper" id="placard">
+        <div class="placard">
+          <p class="placard-number">Exhibit 002 &nbsp;·&nbsp; Track 7</p>
+          <p class="placard-band">The xx</p>
+          <h2 class="placard-title">Lips</h2>
+          <p class="placard-year">2017 &ensp;·&ensp; I See You</p>
+          <div class="placard-rule"></div>
+          <p class="placard-desc">
+            Three voices occupy this song across three different centuries.
+            Trio Mediæval sing a setting of the biblical <em>Song of Songs</em> —
+            one of the oldest surviving love poems — arranged by composer David Lang.
+            Over and between those ancient lines, Romy Madley Croft and Oliver Sim
+            weave their own confessions: physical, immediate, afraid of the fall.
+            The collision is the point. Intimacy has always felt this way — sacred
+            and terrifying at once, drawn from something older than either person in it.
+            The song's defining refusal, sung twice by each voice, is not a boast but
+            a plea: to stay suspended a little longer, to not yet know the weight of
+            coming down. It is a song about the height of love before the landing —
+            and the quiet, impossible wish to never learn the distance.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="gallery-footer">
+    &copy; The Lyric Gallery &nbsp;·&nbsp; All rights reserved
+  </footer>
+
+</div><!-- /#page -->
+
+<script>
+/* ════════════════════════════════════════════════
+   1. SPLASH → PAGE TRANSITION
+════════════════════════════════════════════════ */
+const splash   = document.getElementById('splash');
+const page     = document.getElementById('page');
+const enterBtn = document.getElementById('enter-btn');
+
+enterBtn.addEventListener('click', () => {
+  splash.classList.add('hidden');
+  setTimeout(() => page.classList.add('visible'), 700);
+});
+
+
+/* ════════════════════════════════════════════════
+   2. CUSTOM CURSOR — cold pearl orb
+════════════════════════════════════════════════ */
+const orb   = document.getElementById('cursor-orb');
+const trail = document.getElementById('cursor-trail');
+
+document.addEventListener('mousemove', e => {
+  orb.style.left   = e.clientX + 'px';
+  orb.style.top    = e.clientY + 'px';
+  trail.style.left = e.clientX + 'px';
+  trail.style.top  = e.clientY + 'px';
+});
+
+document.addEventListener('mouseover', e => {
+  if (e.target.classList.contains('lyric-line') || e.target.tagName === 'BUTTON') {
+    orb.style.width = '32px'; orb.style.height = '32px'; orb.style.opacity = '0.65';
+  }
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.classList.contains('lyric-line') || e.target.tagName === 'BUTTON') {
+    orb.style.width = '18px'; orb.style.height = '18px'; orb.style.opacity = '1';
+  }
+});
+
+
+/* ════════════════════════════════════════════════
+   3. SCROLL PROGRESS BAR
+════════════════════════════════════════════════ */
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+}, { passive: true });
+
+
+/* ════════════════════════════════════════════════
+   ANIMATION STATE — pause when tab hidden
+════════════════════════════════════════════════ */
+let parallaxRafId = null;
+let particleRafId = null;
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (parallaxRafId) { cancelAnimationFrame(parallaxRafId); parallaxRafId = null; }
+    if (particleRafId) { cancelAnimationFrame(particleRafId); particleRafId = null; }
+  } else {
+    startParallax();
+    startParticles();
+  }
+});
+
+
+/* ════════════════════════════════════════════════
+   4. MOUSE PARALLAX
+════════════════════════════════════════════════ */
+const bgDeep    = document.getElementById('bg-deep');
+const bgJewel   = document.getElementById('bg-jewel');
+const bgCaustic = document.getElementById('bg-caustics');
+
+let tX = 0, tY = 0, cX = 0, cY = 0;
+document.addEventListener('mousemove', e => {
+  tX = (e.clientX / window.innerWidth  - 0.5) * 2;
+  tY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animateParallax() {
+  cX += (tX - cX) * 0.035;
+  cY += (tY - cY) * 0.035;
+  bgDeep.style.transform    = `translate(${cX * 12}px, ${cY * 9}px) scale(1.04)`;
+  bgJewel.style.transform   = `translate(${cX * 20}px, ${cY * 15}px) scale(1.06)`;
+  bgCaustic.style.transform = `translate(${cX * 16}px, ${cY * 12}px) scale(1.05)`;
+  parallaxRafId = requestAnimationFrame(animateParallax);
+}
+function startParallax() {
+  if (!parallaxRafId) parallaxRafId = requestAnimationFrame(animateParallax);
+}
+startParallax();
+
+
+/* ════════════════════════════════════════════════
+   5. FLOATING PARTICLES
+   These drift DOWN and sideways — falling ash,
+   condensed breath, resisting gravity — unlike
+   the rising bubbles of "Don't Smile".
+   Reflects "I don't wanna know the way down."
+════════════════════════════════════════════════ */
+const canvas = document.getElementById('particles-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resizeCanvas() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas, { passive: true });
+
+// Pressing palette — shadow, weight, altitude, held breath. No warmth.
+const PALETTE = [
+  [158,156,172], // held breath — ashy pale lavender, almost grey
+  [110,108,128], // shadow-tone — desaturated grey-violet
+  [200,204,216], // altitude — bleached ashen blue-white
+  [42,40,64],    // weight — deep low-sat blue-violet, sits not glows
+  [216,218,228], // thin air — the very top, nearly white
+  [80,78,96],    // shadow mid — the specific dark of low light
+  [48,46,62],    // press-dark — weight without temperature
+];
+
+function makeParticle() {
+  const col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+  const dir = Math.random() > 0.5 ? 1 : -1; // some fall, some drift sideways
+  return {
+    x:      Math.random() * W,
+    y:      -20 - Math.random() * 100,
+    r:      0.8 + Math.random() * 3.2,
+    speedY: 0.12 + Math.random() * 0.40, // falls slowly
+    speedX: dir * (Math.random() * 0.22), // slight lateral drift
+    opacity: 0.08 + Math.random() * 0.38,
+    opSpeed: 0.002 + Math.random() * 0.005,
+    opDir:  1,
+    col,
+    glow:   3 + Math.random() * 9,
+    phase:  Math.random() * Math.PI * 2,
+    wobble: 0.2 + Math.random() * 0.5,
+  };
+}
+
+for (let i = 0; i < 48; i++) {
+  const p = makeParticle();
+  p.y = Math.random() * H; // scatter initially
+  particles.push(p);
+}
+
+function drawParticles(t) {
+  ctx.clearRect(0, 0, W, H);
+  for (const p of particles) {
+    const wx = Math.sin(t * 0.0004 * p.wobble + p.phase) * 18;
+    p.opacity += p.opSpeed * p.opDir;
+    if (p.opacity > 0.42 || p.opacity < 0.04) p.opDir *= -1;
+    p.y += p.speedY; // falls down
+    p.x += p.speedX + wx * 0.008;
+
+    const [r,g,b] = p.col;
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r + p.glow);
+    grad.addColorStop(0,   `rgba(${r},${g},${b},${p.opacity})`);
+    grad.addColorStop(0.45,`rgba(${r},${g},${b},${p.opacity * 0.4})`);
+    grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r + p.glow, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // specular
+    ctx.beginPath();
+    ctx.arc(p.x - p.r * 0.3, p.y - p.r * 0.3, p.r * 0.35, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${p.opacity * 0.4})`;
+    ctx.fill();
+
+    if (p.y > H + 20 || p.x < -60 || p.x > W + 60) {
+      Object.assign(p, makeParticle());
+    }
+  }
+}
+
+function particleLoop(t) {
+  drawParticles(t);
+  particleRafId = requestAnimationFrame(particleLoop);
+}
+function startParticles() {
+  if (!particleRafId) particleRafId = requestAnimationFrame(particleLoop);
+}
+startParticles();
+
+
+/* ════════════════════════════════════════════════
+   6. SCROLL REVEAL — per-line entrances
+════════════════════════════════════════════════ */
+const revealEls = document.querySelectorAll(
+  '.lyric-line, .section-label, .placard-wrapper, .verse-pulse'
+);
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    if (el.classList.contains('lyric-line')) {
+      const siblings = [...el.parentElement.querySelectorAll('.lyric-line')];
+      const idx = siblings.indexOf(el);
+      // Chant lines stagger slightly faster — they're sparse, incantatory
+      const delayMs = el.classList.contains('chant') ? idx * 100 : idx * 130;
+      setTimeout(() => el.classList.add('in-view'), delayMs);
+    } else {
+      el.classList.add('in-view');
+    }
+    observer.unobserve(el);
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+
+/* ════════════════════════════════════════════════
+   7. BACK TO TOP
+════════════════════════════════════════════════ */
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  btt.classList.toggle('visible', scrolled > 0.5);
+}, { passive: true });
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+</body>
+</html>
